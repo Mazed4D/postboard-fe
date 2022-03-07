@@ -8,15 +8,43 @@ import {
 	LikeFilled,
 	CommentOutlined,
 } from '@ant-design/icons';
+import axios from 'axios';
 
-const PostCard = ({ isOwnPost = false, name, text, likes }) => {
+const config = {
+	headers: {
+		Authorization:
+			'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFhNDJkYTUwZDQ5OTA0MDhmNTc2NTciLCJuYW1lIjoibWlsYW4iLCJpYXQiOjE2NDY2NzAyNzksImV4cCI6MTY0NzI3NTA3OX0.f0Hr4lFReVnJt5QvHRD5ZO5UI-CjmblQ0CdZ2ISwvOI',
+	},
+};
+
+const PostCard = ({
+	isOwnPost = false,
+	name = 'User name',
+	text = 'post text',
+	isLiked,
+	likes,
+}) => {
 	const params = useParams();
 	const navigate = useNavigate();
-	const [isLiked, setIsLiked] = useState(false);
-	const [likeNumber, setLikeNumber] = useState(0);
-	const likeHandler = () => {
-		setIsLiked(!isLiked);
-		setLikeNumber(likeNumber + 1);
+	const [liked, setLiked] = useState(isLiked);
+	const [likeNumber, setLikeNumber] = useState(likes);
+	const likeHandler = async () => {
+		try {
+			const toggleLike = await axios.post(
+				`${process.env.REACT_APP_API}/likes/toggle/${params.postId}`,
+				{},
+				config
+			);
+			if (toggleLike.status === 200) {
+				setLikeNumber(likeNumber + 1);
+				setLiked(true);
+			} else if (toggleLike.status === 204) {
+				setLikeNumber(likeNumber - 1);
+				setLiked(false);
+			}
+		} catch (err) {
+			console.log(err.response);
+		}
 	};
 
 	return (
@@ -28,8 +56,8 @@ const PostCard = ({ isOwnPost = false, name, text, likes }) => {
 					? [
 							<EditOutlined key='edit' />,
 							<div style={{ display: 'inline-block' }} onClick={likeHandler}>
-								{likeNumber} {isLiked && <LikeFilled key='like' title='lol' />}
-								{!isLiked && <LikeOutlined key='like' title='lol' />}
+								{likeNumber} {liked && <LikeFilled key='like' title='lol' />}
+								{!liked && <LikeOutlined key='like' title='lol' />}
 							</div>,
 							<CommentOutlined
 								key='comments'
@@ -38,8 +66,8 @@ const PostCard = ({ isOwnPost = false, name, text, likes }) => {
 					  ]
 					: [
 							<div style={{ display: 'inline-block' }} onClick={likeHandler}>
-								{likeNumber} {isLiked && <LikeFilled key='like' title='lol' />}
-								{!isLiked && <LikeOutlined key='like' title='lol' />}
+								{likeNumber} {liked && <LikeFilled key='like' title='lol' />}
+								{!liked && <LikeOutlined key='like' title='lol' />}
 							</div>,
 
 							<CommentOutlined
@@ -48,14 +76,13 @@ const PostCard = ({ isOwnPost = false, name, text, likes }) => {
 							/>,
 					  ]
 			}
-			tabBarExtraContent={<h1>hello wrdl</h1>}
 		>
 			<Card.Meta
 				avatar={<Avatar shape='square' icon={<UserOutlined />} />}
-				description='User name'
+				description={name}
 			/>
 			<br />
-			Card textual content
+			{text}
 		</Card>
 	);
 };
