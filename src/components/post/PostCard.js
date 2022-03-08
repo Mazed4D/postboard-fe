@@ -9,6 +9,7 @@ import {
 	CommentOutlined,
 } from '@ant-design/icons';
 import axios from 'axios';
+import Text from 'antd/lib/typography/Text';
 
 const config = {
 	headers: {
@@ -19,19 +20,25 @@ const config = {
 
 const PostCard = ({
 	isOwnPost = false,
+	userId,
+	date,
 	name = 'User name',
 	text = 'post text',
-	isLiked,
-	likes,
+	isLiked = false,
+	likes = 0,
+	loading = false,
+	postId,
 }) => {
 	const params = useParams();
+	// POST ID
+	const id = postId || params.postId;
 	const navigate = useNavigate();
 	const [liked, setLiked] = useState(isLiked);
 	const [likeNumber, setLikeNumber] = useState(likes);
 	const likeHandler = async () => {
 		try {
 			const toggleLike = await axios.post(
-				`${process.env.REACT_APP_API}/likes/toggle/${params.postId}`,
+				`${process.env.REACT_APP_API}/likes/toggle/${id}`,
 				{},
 				config
 			);
@@ -51,38 +58,27 @@ const PostCard = ({
 		<Card
 			style={{ width: 500, marginBottom: '1rem' }}
 			hoverable
-			actions={
-				isOwnPost
-					? [
-							<EditOutlined key='edit' />,
-							<div style={{ display: 'inline-block' }} onClick={likeHandler}>
-								{likeNumber} {liked && <LikeFilled key='like' title='lol' />}
-								{!liked && <LikeOutlined key='like' title='lol' />}
-							</div>,
-							<CommentOutlined
-								key='comments'
-								onClick={() => navigate(`/post/fakepostid`)}
-							/>,
-					  ]
-					: [
-							<div style={{ display: 'inline-block' }} onClick={likeHandler}>
-								{likeNumber} {liked && <LikeFilled key='like' title='lol' />}
-								{!liked && <LikeOutlined key='like' title='lol' />}
-							</div>,
-
-							<CommentOutlined
-								key='comments'
-								onClick={() => navigate(`/post/fakepostid`)}
-							/>,
-					  ]
-			}
+			loading={loading}
+			actions={[
+				<>{isOwnPost && <EditOutlined key='edit' />}</>,
+				<div style={{ display: 'inline-block' }} onClick={likeHandler}>
+					{likeNumber} {liked && <LikeFilled key='like' title='lol' />}
+					{!liked && <LikeOutlined key='like' title='lol' />}
+				</div>,
+				<CommentOutlined
+					key='comments'
+					onClick={() => navigate(`/post/${id}`)}
+				/>,
+			]}
 		>
 			<Card.Meta
+				onClick={() => navigate(`/user/${userId}`)}
 				avatar={<Avatar shape='square' icon={<UserOutlined />} />}
-				description={name}
+				title={name}
+				description={date}
 			/>
 			<br />
-			{text}
+			<Text onClick={() => navigate(`/post/${postId}`)}>{text}</Text>
 		</Card>
 	);
 };
