@@ -25,7 +25,15 @@ const Home = () => {
 			<h1>Public feed</h1>
 			{loading && <Spin />}
 			{posts.map((post) => {
-				return <PostCard name={post.name} text={post.text} />;
+				return (
+					<PostCard
+						date={new Date(post.createdAt).toUTCString()}
+						name={post.name}
+						text={post.text}
+						postId={post._id}
+						userId={post.user}
+					/>
+				);
 			})}
 
 			<Pagination

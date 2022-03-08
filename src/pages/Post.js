@@ -1,4 +1,3 @@
-import { Spin } from 'antd';
 import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
@@ -59,12 +58,15 @@ const Post = () => {
 				alignItems: 'center',
 			}}
 		>
-			{!post || !likes || (!isLiked && <Spin />)}
+			{!post || (!likes && <PostCard loading={true} />)}
 			{post && likes && isLiked && (
 				<PostCard
+					postId={post._id}
 					name={post.name}
 					text={post.text}
+					date={new Date(post.createdAt).toUTCString()}
 					likes={likes.data.length}
+					userId={post.user}
 					isLiked={isLiked}
 				/>
 			)}
