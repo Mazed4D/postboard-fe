@@ -3,15 +3,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthForm from '../components/auth/AuthForm';
 
-const AuthPage = () => {
+const RegisterPage = () => {
 	return (
 		<div>
-			<AuthForm />
+			<AuthForm isRegister={true} />
 			<Button>
-				<Link to={'/register'}>Don't have an account?</Link>
+				<Link to={'/'}>Already have an account?</Link>
 			</Button>
 		</div>
 	);
 };
 
-export default AuthPage;
+export default RegisterPage;
