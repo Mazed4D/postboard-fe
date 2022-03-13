@@ -1,14 +1,34 @@
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Spin } from 'antd';
+import Text from 'antd/lib/typography/Text';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setCredientials } from '../../redux/auth';
+import authServices from '../../services/auth.service';
 
 const AuthForm = ({ isRegister = false }) => {
+	const dispatch = useDispatch();
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
 	const [form] = Form.useForm();
 
 	const onFinish = async (values) => {
-		console.log('Success:', values);
-		if (isRegister) {
-			console.log('Register action here');
-		} else {
-			console.log('Login action here');
+		setLoading(true);
+		const { token, user, error } = isRegister
+			? await authServices.register(values)
+			: await authServices.login(values);
+		if (token) {
+			dispatch(
+				setCredientials({
+					isLoggedIn: true,
+					user: user.name,
+					userId: user.userId,
+				})
+			);
+		}
+		setLoading(false);
+		if (error) {
+			setError(true);
+			console.log(error.data);
 		}
 	};
 
@@ -19,23 +39,23 @@ const AuthForm = ({ isRegister = false }) => {
 	};
 
 	return (
-		<Form
-			form={form}
-			name='basic'
-			labelCol={{
-				span: 8,
-			}}
-			wrapperCol={{
-				span: 16,
-			}}
-			initialValues={{
-				remember: true,
-			}}
-			onFinish={onFinish}
-			onFinishFailed={onFinishFailed}
-			autoComplete='off'
-		>
-			{isRegister && (
+		<Spin spinning={loading}>
+			<Form
+				form={form}
+				name='basic'
+				labelCol={{
+					span: 8,
+				}}
+				wrapperCol={{
+					span: 16,
+				}}
+				initialValues={{
+					remember: true,
+				}}
+				onFinish={onFinish}
+				onFinishFailed={onFinishFailed}
+				autoComplete='off'
+			>
 				<Form.Item
 					label='Email'
 					name='email'
@@ -49,47 +69,51 @@ const AuthForm = ({ isRegister = false }) => {
 				>
 					<Input />
 				</Form.Item>
-			)}
 
-			<Form.Item
-				label='Name'
-				name='name'
-				rules={[
-					{
-						required: true,
-						message: 'Please input your name!',
-						type: 'string',
-					},
-				]}
-			>
-				<Input />
-			</Form.Item>
+				{isRegister && (
+					<Form.Item
+						label='Name'
+						name='name'
+						rules={[
+							{
+								required: true,
+								message: 'Please input your name!',
+								type: 'string',
+							},
+						]}
+					>
+						<Input />
+					</Form.Item>
+				)}
 
-			<Form.Item
-				label='Password'
-				name='password'
-				rules={[
-					{
-						required: true,
-						message: 'Please input your password!',
-						type: 'string',
-					},
-				]}
-			>
-				<Input.Password />
-			</Form.Item>
-
-			<Form.Item
-				wrapperCol={{
-					offset: 8,
-					span: 16,
-				}}
-			>
-				<Button type='primary' htmlType='submit'>
-					{isRegister ? 'Register' : 'Login'}
-				</Button>
-			</Form.Item>
-		</Form>
+				<Form.Item
+					label='Password'
+					name='password'
+					rules={[
+						{
+							required: true,
+							message: 'Please input your password!',
+							type: 'string',
+						},
+					]}
+				>
+					<Input.Password />
+				</Form.Item>
+				{error && <Text style={{ color: 'red' }}>Check credientials</Text>}
+				<Form.Item
+					wrapperCol={
+						{
+							// offset: 8,
+							// span: 16,
+						}
+					}
+				>
+					<Button type='primary' htmlType='submit' block>
+						{isRegister ? 'Register' : 'Login'}
+					</Button>
+				</Form.Item>
+			</Form>
+		</Spin>
 	);
 };
 
