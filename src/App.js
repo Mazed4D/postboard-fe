@@ -10,16 +10,17 @@ import RegisterPage from './pages/Register';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { deleteCredientials, setCredientials } from './redux/auth';
-import jwtDecode from 'jwt-decode';
 import authServices from './services/auth.service';
+import { isJwtExpired } from 'jwt-check-expiration';
+
+const token = localStorage.getItem('token');
+const user = localStorage.getItem('user');
+const userId = localStorage.getItem('userId');
 
 function App() {
 	const dispatch = useDispatch();
 	useEffect(() => {
-		const token = localStorage.getItem('token');
-		const user = localStorage.getItem('user');
-		const userId = localStorage.getItem('userId');
-		if (!token) {
+		if (!token || isJwtExpired(token)) {
 			authServices.logout();
 			dispatch(deleteCredientials());
 		} else {
@@ -39,7 +40,7 @@ function App() {
 		<div className='App'>
 			<Routes>
 				<Route path='/' element={<LayoutComp />}>
-					{isLoggedIn && (
+					{token && (
 						<>
 							<Route index element={<Home />} />
 							<Route path='/:page' element={<Home />} />
