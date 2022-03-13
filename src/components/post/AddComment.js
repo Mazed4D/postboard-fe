@@ -1,29 +1,63 @@
-import { Comment, Avatar, Form, Button, List, Input } from 'antd';
-import moment from 'moment';
-import React, { ReactDOM, mountNode } from 'react';
-
+import { Button, Input, Spin } from 'antd';
+import { useState } from 'react';
+import { SendOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 const { TextArea } = Input;
 
-const AddComment = ({ onChange, onSubmit, submitting, value }) => (
-	<div
-		style={{
-			minWidth: '44vw',
-		}}
-	>
-		<Form.Item>
-			<TextArea rows={4} onChange={onChange} value={value} />
-		</Form.Item>
-		<Form.Item>
-			<Button
-				htmlType='submit'
-				loading={submitting}
-				onClick={onSubmit}
-				type='primary'
-			>
-				Add Comment
-			</Button>
-		</Form.Item>
-	</div>
-);
+const config = {
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem('token')}`,
+	},
+};
+
+const AddComment = () => {
+	const { postId } = useParams();
+	const [text, setText] = useState('');
+	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
+
+	const sendPostHandler = async () => {
+		setLoading(true);
+		try {
+			const res = await axios.post(
+				`${process.env.REACT_APP_API}/comments/post/${postId}`,
+				{
+					text,
+				},
+				config
+			);
+			navigate(0);
+		} catch (error) {
+			console.log(error.response);
+		}
+
+		setLoading(false);
+	};
+
+	return (
+		<div>
+			<Spin spinning={loading} tip='Sending post...'>
+				<TextArea
+					showCount
+					maxLength={280}
+					style={{ height: 120 }}
+					onChange={(e) => setText(e.target.value)}
+					value={text}
+				/>
+				<Button
+					style={{ marginTop: '1rem' }}
+					size={'large'}
+					block
+					type={'primary'}
+					onClick={sendPostHandler}
+				>
+					<SendOutlined />
+					Send comment{' '}
+				</Button>
+			</Spin>
+		</div>
+	);
+};
 
 export default AddComment;
