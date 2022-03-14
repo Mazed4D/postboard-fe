@@ -4,6 +4,7 @@ import { UserOutlined } from '@ant-design/icons';
 import Text from 'antd/lib/typography/Text';
 
 const DisplayCard = ({
+	avatar,
 	actions,
 	name,
 	date,
@@ -19,7 +20,14 @@ const DisplayCard = ({
 		>
 			<Card.Meta
 				onClick={navigateUser}
-				avatar={<Avatar shape='square' icon={<UserOutlined />} />}
+				avatar={
+					<Avatar
+						shape='square'
+						size={'large'}
+						icon={<UserOutlined />}
+						src={avatar}
+					/>
+				}
 				title={name}
 				description={date}
 			/>
