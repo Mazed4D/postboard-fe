@@ -19,6 +19,8 @@ const userId = localStorage.getItem('userId');
 
 function App() {
 	const dispatch = useDispatch();
+	const { isLoggedIn } = useSelector((state) => state.auth);
+
 	useEffect(() => {
 		if (!token || isJwtExpired(token)) {
 			authServices.logout();
@@ -33,8 +35,6 @@ function App() {
 			);
 		}
 	}, []);
-
-	const { isLoggedIn } = useSelector((state) => state.auth);
 
 	return (
 		<div className='App'>
