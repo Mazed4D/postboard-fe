@@ -2,7 +2,6 @@ import { Button, Input, Spin } from 'antd';
 import { useState } from 'react';
 import { SendOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 const { TextArea } = Input;
 
