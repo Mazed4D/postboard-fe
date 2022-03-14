@@ -1,5 +1,5 @@
 import { Layout, Menu } from 'antd';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
 	HomeOutlined,
 	UserOutlined,
@@ -15,6 +15,7 @@ import { deleteCredientials } from '../../redux/auth';
 const { Header, Footer, Content } = Layout;
 
 const LayoutComp = () => {
+	const navigate = useNavigate();
 	const token = localStorage.getItem('token');
 	const userId = localStorage.getItem('userId');
 	const isLoggedIn = token || false;
@@ -23,6 +24,7 @@ const LayoutComp = () => {
 	const logoutHandler = () => {
 		authServices.logout();
 		dispatch(deleteCredientials());
+		navigate(0);
 	};
 
 	return (
@@ -51,9 +53,7 @@ const LayoutComp = () => {
 								style={{ marginLeft: 'auto' }}
 								onClick={logoutHandler}
 							>
-								<NavLink to={`/}`}>
-									<LogoutOutlined /> Logout
-								</NavLink>
+								<LogoutOutlined /> Logout
 							</Menu.Item>
 						</>
 					)}

@@ -2,11 +2,13 @@ import { Form, Input, Button, Spin } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { setCredientials } from '../../redux/auth';
 import authServices from '../../services/auth.service';
 
 const AuthForm = ({ isRegister = false }) => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [form] = Form.useForm();
@@ -24,6 +26,7 @@ const AuthForm = ({ isRegister = false }) => {
 					userId: user.userId,
 				})
 			);
+			navigate(0);
 		}
 		setLoading(false);
 		if (error) {
