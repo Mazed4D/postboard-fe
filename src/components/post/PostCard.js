@@ -24,6 +24,7 @@ const PostCard = ({ postId }) => {
 	const params = useParams();
 	const navigate = useNavigate();
 	const [postData, setPostData] = useState();
+	const [avatar, setAvatar] = useState();
 	const [liked, setLiked] = useState(false);
 	const [likeNumber, setLikeNumber] = useState();
 	const [likeSpin, setLikeSpin] = useState(false);
@@ -57,6 +58,14 @@ const PostCard = ({ postId }) => {
 			}
 			setLikeNumber(resLikes.data.length);
 		};
+		const fetchImage = async () => {
+			const img = await axios.get(
+				`${process.env.REACT_APP_API}/upload/user/${userId}`,
+				config
+			);
+			setAvatar(`${process.env.REACT_APP_SERVER}/uploads/${img.data.url}`);
+		};
+		fetchImage();
 		loadPost();
 		loadLikes();
 	}, []);
@@ -88,7 +97,12 @@ const PostCard = ({ postId }) => {
 		<div style={{ display: 'inline-block' }} onClick={likeHandler}>
 			{likeNumber}{' '}
 			{liked ? (
-				<LikeFilled key='like' title='lol' spin={likeSpin} />
+				<LikeFilled
+					key='like'
+					title='lol'
+					spin={likeSpin}
+					style={{ color: '#177DDC' }}
+				/>
 			) : (
 				<LikeOutlined key='like' title='lol' spin={likeSpin} />
 			)}
@@ -107,6 +121,7 @@ const PostCard = ({ postId }) => {
 		// RETURN DISPLAY CARD CONTROLLED COMPONENT
 		return (
 			<DisplayCard
+				avatar={avatar}
 				user={postData.user}
 				key={postData._id}
 				actions={actions}
@@ -122,21 +137,3 @@ const PostCard = ({ postId }) => {
 };
 
 export default PostCard;
-
-// <Card
-// 	style={{ width: 500, marginBottom: '1rem' }}
-// 	hoverable
-// 	loading={loading}
-// 	actions={actions}
-// >
-// 	<Card.Meta
-// 		onClick={() => navigate(`/user/${postData.user}`)}
-// 		avatar={<Avatar shape='square' icon={<UserOutlined />} />}
-// 		title={postData.name}
-// 		description={new Date(postData.createdAt).toISOString()}
-// 	/>
-// 	<br />
-// 	<Text onClick={() => navigate(`/post/${postId}`)}>
-// 		{postData.text}
-// 	</Text>
-// </Card>
