@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
+import ProfilePicture from './ProfilePicture';
 
 const config = {
 	headers: {
@@ -14,6 +15,7 @@ const config = {
 const ProfileHeader = () => {
 	const { userId } = useParams();
 	const [name, setName] = useState('Loading...');
+	const [avatar, setAvatar] = useState();
 
 	useEffect(() => {
 		const fetchUserName = async () => {
@@ -28,7 +30,16 @@ const ProfileHeader = () => {
 
 	return (
 		<div>
-			<Avatar size='large' shape='square' icon={<UserOutlined />} />
+			<div>
+				<Avatar
+					size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
+					shape='square'
+					icon={<UserOutlined />}
+					src={avatar}
+				/>
+			</div>
+			<br />
+			<ProfilePicture userId={userId} setAvatar={setAvatar} />
 			<h2>{name}</h2>
 			<p>{userId}</p>
 		</div>
