@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import {
-	LikeOutlined,
-	LikeFilled,
-	CommentOutlined,
-	EditOutlined,
-} from '@ant-design/icons';
+import { LikeOutlined, LikeFilled, CommentOutlined } from '@ant-design/icons';
 import DisplayCard from './DisplayCard';
 import LoadingCard from './LoadingCard';
 import { useSelector } from 'react-redux';
@@ -60,15 +55,18 @@ const PostCard = ({ postId }) => {
 		};
 		const fetchImage = async () => {
 			const img = await axios.get(
-				`${process.env.REACT_APP_API}/upload/user/${userId}`,
+				`${process.env.REACT_APP_API}/upload/user/${postData.user}`,
 				config
 			);
 			setAvatar(`${process.env.REACT_APP_SERVER}/uploads/${img.data.url}`);
 		};
-		fetchImage();
-		loadPost();
-		loadLikes();
-	}, []);
+		if (!postData) {
+			loadPost();
+			loadLikes();
+		} else {
+			fetchImage();
+		}
+	}, [postData, id, userId]);
 
 	// LIKE HANDLER FUNCTION
 	const likeHandler = async () => {
@@ -115,9 +113,9 @@ const PostCard = ({ postId }) => {
 	}
 	if (postData && likeNumber !== undefined) {
 		// CHECK IF POST IS USER'S OWN POST TO ADD EDIT BUTTON
-		if (postData.user === userId) {
-			actions.unshift(<EditOutlined />);
-		}
+		// if (postData.user === userId) {
+		// actions.unshift(<EditOutlined />);
+		// }
 		// RETURN DISPLAY CARD CONTROLLED COMPONENT
 		return (
 			<DisplayCard
