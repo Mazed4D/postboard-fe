@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import styles from './Layout.module.less';
 import Text from 'antd/lib/typography/Text';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import authServices from '../../services/auth.service';
 import { deleteCredientials } from '../../redux/auth';
 

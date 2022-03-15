@@ -1,4 +1,4 @@
-import { Button, Upload, message, Spin, Image } from 'antd';
+import { Button, Upload, message, Spin } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
