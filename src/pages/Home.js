@@ -9,9 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import AddPost from '../components/home/AddPost';
 import PostCard from '../components/post/PostCard';
 
-// TEMPORARY
-const LOGGED_USER_ID = '621a42da50d4990408f57657';
-
 const Home = () => {
 	const navigate = useNavigate();
 	const { page } = useParams();
