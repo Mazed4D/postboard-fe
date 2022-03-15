@@ -19,6 +19,7 @@ const AddPost = () => {
 	const sendPostHandler = async () => {
 		setLoading(true);
 		try {
+			// eslint-disable-next-line no-unused-vars
 			const res = await axios.post(
 				`${process.env.REACT_APP_API}/posts`,
 				{
