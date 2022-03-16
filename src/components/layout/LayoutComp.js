@@ -5,6 +5,7 @@ import {
 	UserOutlined,
 	LogoutOutlined,
 	MessageFilled,
+	TeamOutlined,
 } from '@ant-design/icons';
 import styles from './Layout.module.less';
 import Text from 'antd/lib/typography/Text';
@@ -41,6 +42,11 @@ const LayoutComp = () => {
 							<Menu.Item key='home'>
 								<NavLink to={'/'}>
 									<HomeOutlined /> Home
+								</NavLink>
+							</Menu.Item>
+							<Menu.Item key='followed'>
+								<NavLink to={`/followed`}>
+									<TeamOutlined /> Followed
 								</NavLink>
 							</Menu.Item>
 							<Menu.Item key='profile'>
