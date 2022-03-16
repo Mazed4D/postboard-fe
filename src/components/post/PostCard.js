@@ -5,6 +5,7 @@ import {
 	LikeOutlined,
 	LikeFilled,
 	CommentOutlined,
+	UsergroupDeleteOutlined,
 	UsergroupAddOutlined,
 } from '@ant-design/icons';
 import DisplayCard from './DisplayCard';
@@ -26,6 +27,7 @@ const PostCard = ({ postId }) => {
 	const [postData, setPostData] = useState();
 	const [avatar, setAvatar] = useState();
 	const [liked, setLiked] = useState(false);
+	const [isFollowed, setIsFollowed] = useState(false);
 	const [likeNumber, setLikeNumber] = useState();
 	const [likeSpin, setLikeSpin] = useState(false);
 
@@ -65,11 +67,24 @@ const PostCard = ({ postId }) => {
 			);
 			setAvatar(`${process.env.REACT_APP_SERVER}/uploads/${img.data.url}`);
 		};
+		const fetchFollowed = async () => {
+			try {
+				const isFollowed = await axios.get(
+					`${process.env.REACT_APP_API}/follow/${postData.user}`,
+					config
+				);
+				console.log(isFollowed);
+				setIsFollowed(isFollowed.data.isFollowed);
+			} catch (error) {
+				console.log(error);
+			}
+		};
 		if (!postData) {
 			loadPost();
 			loadLikes();
 		} else {
 			fetchImage();
+			fetchFollowed();
 		}
 	}, [postData, id, userId]);
 
@@ -96,14 +111,14 @@ const PostCard = ({ postId }) => {
 	};
 
 	const followHandler = async () => {
-		console.log('here');
 		try {
 			const follow = await axios.post(
 				`${process.env.REACT_APP_API}/follow/${postData.user}`,
 				{},
 				config
 			);
-			console.log(follow);
+			console.log(follow.data);
+			setIsFollowed(!isFollowed);
 		} catch (error) {
 			console.log(error);
 		}
@@ -126,7 +141,16 @@ const PostCard = ({ postId }) => {
 		</div>,
 		<CommentOutlined key='comments' onClick={() => navigate(`/post/${id}`)} />,
 		<div onClick={followHandler}>
-			<UsergroupAddOutlined key='follow' /> Follow
+			{isFollowed && (
+				<>
+					<UsergroupDeleteOutlined key='follow' /> Unfollow
+				</>
+			)}
+			{!isFollowed && (
+				<>
+					<UsergroupAddOutlined key='follow' /> Follow
+				</>
+			)}
 		</div>,
 	];
 
