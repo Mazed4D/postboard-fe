@@ -1,5 +1,5 @@
 import { Drawer, Layout, Menu } from 'antd';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { MessageFilled, MenuOutlined } from '@ant-design/icons';
 import styles from './Layout.module.less';
 import Text from 'antd/lib/typography/Text';
