@@ -119,11 +119,12 @@ const PostCard = ({ postId }) => {
 	if (!postData || likeNumber === undefined) {
 		return <LoadingCard actions={actions} />;
 	}
+
 	if (postData && likeNumber !== undefined) {
-		// CHECK IF POST IS USER'S OWN POST TO ADD EDIT BUTTON
-		// if (postData.user === userId) {
-		// actions.unshift(<EditOutlined />);
-		// }
+		// CHECK IF POST IS USER'S OWN POST TO REMOVE FOLLOW BUTTON
+		if (postData.user === userId) {
+			actions.pop();
+		}
 		// RETURN DISPLAY CARD CONTROLLED COMPONENT
 		return (
 			<DisplayCard
