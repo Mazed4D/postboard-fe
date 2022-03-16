@@ -20,7 +20,7 @@ const ReplyComment = ({ commentId, user, userId, text }) => {
 
 	const actions = [
 		<Popconfirm
-			title='Are you sure to delete this comment?'
+			title='Are you sure want to delete this comment?'
 			onConfirm={confirmDelete}
 			okText='Yes, delete my comment'
 		>
