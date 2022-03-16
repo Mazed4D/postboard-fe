@@ -95,6 +95,20 @@ const PostCard = ({ postId }) => {
 		}
 	};
 
+	const followHandler = async () => {
+		console.log('here');
+		try {
+			const follow = await axios.post(
+				`${process.env.REACT_APP_API}/follow/${postData.user}`,
+				{},
+				config
+			);
+			console.log(follow);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	// ACTIONS
 	const actions = [
 		<div style={{ display: 'inline-block' }} onClick={likeHandler}>
@@ -111,7 +125,7 @@ const PostCard = ({ postId }) => {
 			)}
 		</div>,
 		<CommentOutlined key='comments' onClick={() => navigate(`/post/${id}`)} />,
-		<div>
+		<div onClick={followHandler}>
 			<UsergroupAddOutlined key='follow' /> Follow
 		</div>,
 	];
