@@ -32,7 +32,7 @@ const ProfileHeader = () => {
 				/>
 			</div>
 			<br />
-			<Title level={'h2'}>{name}</Title>
+			<Title level={2}>{name}</Title>
 			<Text>{userId}</Text>
 			<ProfilePicture
 				userId={userId}
