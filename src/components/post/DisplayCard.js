@@ -16,6 +16,7 @@ const DisplayCard = ({
 		<Card
 			style={{ width: '90vw', maxWidth: 500, marginBottom: '1rem' }}
 			actions={actions}
+			hoverable
 		>
 			<Card.Meta
 				onClick={navigateUser}
