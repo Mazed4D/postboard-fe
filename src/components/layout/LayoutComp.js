@@ -56,7 +56,7 @@ const LayoutComp = () => {
 							<Menu.Item
 								key='drawer'
 								style={{ marginLeft: 'auto' }}
-								onClick={() => setVisible(true)}
+								onClick={showDrawer}
 							>
 								<MenuOutlined />
 							</Menu.Item>
@@ -66,7 +66,7 @@ const LayoutComp = () => {
 							onClose={onClose}
 							visible={visible}
 							width={'60vw'}
-							onClick={() => setVisible(false)}
+							onClick={onClose}
 						>
 							<MenuComp
 								mode='vertical'
