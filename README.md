@@ -10,7 +10,7 @@ To deploy the frontend you need to create an .env file in the root folder and ad
 
 **REACT_APP_API**={URL of postboard-api + /api/v1/, example: http://localhost:3000/api/v1}
 
-**REACT_APP_SERVER**={URL of postboard-api, example: http://localhost:3000/api/v1}
+**REACT_APP_SERVER**={URL of postboard-api, example: http://localhost:3000}
 
 #### NOTE
 
