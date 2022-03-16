@@ -25,6 +25,7 @@ const Comments = () => {
 			{comments.map((comment) => {
 				return (
 					<ReplyComment
+						commentId={comment._id}
 						user={comment.username}
 						userId={comment.user}
 						text={comment.text}

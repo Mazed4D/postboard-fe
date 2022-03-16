@@ -205,6 +205,22 @@ const follow = async (postData, setIsFollowed, isFollowed) => {
 	}
 };
 
+const deleteComment = async (commentId) => {
+	try {
+		const comment = await axios.delete(
+			`${process.env.REACT_APP_API}/comments/${commentId}`,
+			config
+		);
+		return true;
+	} catch (error) {
+		message.error(
+			`${error.response.data.msg || error.response.data} (${
+				error.response.status
+			})`
+		);
+	}
+};
+
 const apiServices = {
 	headers,
 	printPosts,
@@ -219,6 +235,7 @@ const apiServices = {
 	fetchFollowed,
 	toggleLike,
 	follow,
+	deleteComment,
 };
 
 export default apiServices;
