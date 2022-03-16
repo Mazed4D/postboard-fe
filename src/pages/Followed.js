@@ -1,4 +1,5 @@
 import { Pagination, Spin } from 'antd';
+import Title from 'antd/lib/typography/Title';
 import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
@@ -48,10 +49,7 @@ const Followed = () => {
 
 	return (
 		<div>
-			<h1>Followed feed</h1>
-			<div style={{ marginBottom: '3rem' }}>
-				<AddPost />
-			</div>
+			<Title>Followed feed</Title>
 			{loading && <Spin />}
 			{posts.map((post) => {
 				return <PostCard key={post} postId={post} />;
