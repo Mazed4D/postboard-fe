@@ -6,11 +6,13 @@ import {
 	CommentOutlined,
 	UsergroupDeleteOutlined,
 	UsergroupAddOutlined,
+	DeleteOutlined,
 } from '@ant-design/icons';
 import DisplayCard from './DisplayCard';
 import LoadingCard from './LoadingCard';
 import { useSelector } from 'react-redux';
 import apiServices from '../../services/api.services';
+import { Popconfirm } from 'antd';
 
 const PostCard = ({ postId }) => {
 	const { userId } = useSelector((state) => state.auth);
@@ -35,7 +37,7 @@ const PostCard = ({ postId }) => {
 		}
 	}, [postData, id, userId]);
 
-	const likeHandler = async () => {
+	const likeHandler = () => {
 		apiServices.toggleLike(
 			id,
 			setLikeSpin,
@@ -43,6 +45,11 @@ const PostCard = ({ postId }) => {
 			likeNumber,
 			setLiked
 		);
+	};
+
+	const confirmDelete = () => {
+		apiServices.deletePost(postId);
+		navigate(0);
 	};
 
 	const followHandler = async () => {
@@ -85,6 +92,15 @@ const PostCard = ({ postId }) => {
 	if (postData && likeNumber !== undefined) {
 		if (postData.user === userId) {
 			actions.pop();
+			actions.unshift(
+				<Popconfirm
+					title='Are you sure to delete this post?'
+					onConfirm={confirmDelete}
+					okText='Yes, delete my post'
+				>
+					<DeleteOutlined /> Delete
+				</Popconfirm>
+			);
 		}
 		return (
 			<DisplayCard

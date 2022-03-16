@@ -221,6 +221,22 @@ const deleteComment = async (commentId) => {
 	}
 };
 
+const deletePost = async (postId) => {
+	try {
+		const post = await axios.delete(
+			`${process.env.REACT_APP_API}/posts/${postId}`,
+			config
+		);
+		return true;
+	} catch (error) {
+		message.error(
+			`${error.response.data.msg || error.response.data} (${
+				error.response.status
+			})`
+		);
+	}
+};
+
 const apiServices = {
 	headers,
 	printPosts,
@@ -236,6 +252,7 @@ const apiServices = {
 	toggleLike,
 	follow,
 	deleteComment,
+	deletePost,
 };
 
 export default apiServices;
