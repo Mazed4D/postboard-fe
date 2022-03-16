@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { LikeOutlined, LikeFilled, CommentOutlined } from '@ant-design/icons';
+import {
+	LikeOutlined,
+	LikeFilled,
+	CommentOutlined,
+	UsergroupAddOutlined,
+} from '@ant-design/icons';
 import DisplayCard from './DisplayCard';
 import LoadingCard from './LoadingCard';
 import { useSelector } from 'react-redux';
@@ -106,6 +111,9 @@ const PostCard = ({ postId }) => {
 			)}
 		</div>,
 		<CommentOutlined key='comments' onClick={() => navigate(`/post/${id}`)} />,
+		<div>
+			<UsergroupAddOutlined key='follow' /> Follow
+		</div>,
 	];
 
 	if (!postData || likeNumber === undefined) {
