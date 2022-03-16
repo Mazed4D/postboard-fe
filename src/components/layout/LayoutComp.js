@@ -41,7 +41,7 @@ const LayoutComp = () => {
 	return (
 		<Layout className='layout' style={{ minHeight: '100vh' }}>
 			<Header>
-				<div className={styles.logo} style={{ cursor: 'pointer' }}>
+				<div className={styles.logo}>
 					<Text style={{ fontSize: '1rem' }}>
 						<MessageFilled /> Postboard
 					</Text>
