@@ -92,9 +92,9 @@ const PostCard = ({ postId }) => {
 	if (postData && likeNumber !== undefined) {
 		if (postData.user === userId) {
 			actions.pop();
-			actions.unshift(
+			actions.push(
 				<Popconfirm
-					title='Are you sure to delete this post?'
+					title='Are you sure you want to delete this post?'
 					onConfirm={confirmDelete}
 					okText='Yes, delete my post'
 				>
