@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { deleteCredientials, setCredientials } from './redux/auth';
 import authServices from './services/auth.service';
 import { isJwtExpired } from 'jwt-check-expiration';
+import Followed from './pages/Followed';
 
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
@@ -44,6 +45,8 @@ function App() {
 						<>
 							<Route index element={<Home />} />
 							<Route path='/:page' element={<Home />} />
+							<Route path='/followed' element={<Followed />} />
+							<Route path='/followed/:page' element={<Followed />} />
 							<Route path='user/:userId' element={<Profile />} />
 							<Route path='user/:userId/:page' element={<Profile />} />
 							<Route path='post/:postId' element={<Post />} />
