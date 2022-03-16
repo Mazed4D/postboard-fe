@@ -7,8 +7,13 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AddPost from '../components/home/AddPost';
 import PostCard from '../components/post/PostCard';
+
+const config = {
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem('token')}`,
+	},
+};
 
 const Followed = () => {
 	const navigate = useNavigate();
@@ -22,7 +27,8 @@ const Followed = () => {
 		const printPosts = async () => {
 			try {
 				const loadPosts = await axios.get(
-					`${process.env.REACT_APP_API}/posts?page=${pageNum}`
+					`${process.env.REACT_APP_API}/posts/followed?page=${pageNum}`,
+					config
 				);
 				setPosts(loadPosts.data.postIds);
 				setNumberOfPosts(loadPosts.data.totalPosts);
@@ -54,17 +60,25 @@ const Followed = () => {
 			{posts.map((post) => {
 				return <PostCard key={post} postId={post} />;
 			})}
+			{!loading && posts.length < 1 && (
+				<Title>
+					No posts by followed users or you aren't following any users
+				</Title>
+			)}
 
-			<Pagination
-				current={pageNum}
-				pageSize={4}
-				showSizeChanger={false}
-				total={numberOfPosts}
-				onChange={(e) => {
-					setPageNum(e);
-					navigate(`/followed/${e}`);
-				}}
-			/>
+			{posts.length > 0 && (
+				<Pagination
+					current={pageNum}
+					pageSize={4}
+					showSizeChanger={false}
+					total={numberOfPosts}
+					onChange={(e) => {
+						setPageNum(e);
+						navigate(`/followed/${e}`);
+					}}
+				/>
+			)}
+
 			<ToastContainer
 				position='top-right'
 				autoClose={3000}
