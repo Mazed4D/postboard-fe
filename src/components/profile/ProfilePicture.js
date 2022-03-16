@@ -26,7 +26,6 @@ const ProfilePicture = ({ userId, loggedUserId, setAvatar }) => {
 	};
 
 	const handleChange = (info) => {
-		console.log(info);
 		if (info.file.status === 'uploading') {
 			setLoading(true);
 			return;

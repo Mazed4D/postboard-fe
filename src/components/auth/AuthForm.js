@@ -31,13 +31,10 @@ const AuthForm = ({ isRegister = false }) => {
 		setLoading(false);
 		if (error) {
 			setError(true);
-			console.log(error.data);
 		}
 	};
 
 	const onFinishFailed = (errorInfo) => {
-		console.log(form.getFieldValue('name'));
-
 		console.log('Failed:', errorInfo);
 	};
 

@@ -145,7 +145,6 @@ const fetchFollowed = async (postData, setIsFollowed) => {
 			`${process.env.REACT_APP_API}/follow/${postData.user}`,
 			config
 		);
-		console.log(isFollowed);
 		setIsFollowed(isFollowed.data.isFollowed);
 	} catch (error) {
 		message.error(
@@ -194,7 +193,6 @@ const follow = async (postData, setIsFollowed, isFollowed) => {
 			{},
 			config
 		);
-		console.log(follow.data);
 		setIsFollowed(!isFollowed);
 	} catch (error) {
 		message.error(

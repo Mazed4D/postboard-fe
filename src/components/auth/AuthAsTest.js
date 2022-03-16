@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -29,7 +29,7 @@ const AuthAsTest = () => {
 		}
 		setLoading(false);
 		if (error) {
-			console.log(error.data);
+			message.error(error.response.data);
 		}
 	};
 
