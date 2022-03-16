@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import {
 	LikeOutlined,
 	LikeFilled,
@@ -11,16 +10,9 @@ import {
 import DisplayCard from './DisplayCard';
 import LoadingCard from './LoadingCard';
 import { useSelector } from 'react-redux';
-
-//TEMPORARY
-const config = {
-	headers: {
-		Authorization: `Bearer ${localStorage.getItem('token')}`,
-	},
-};
+import apiServices from '../../services/api.services';
 
 const PostCard = ({ postId }) => {
-	// HOOKS
 	const { userId } = useSelector((state) => state.auth);
 	const params = useParams();
 	const navigate = useNavigate();
@@ -31,100 +23,32 @@ const PostCard = ({ postId }) => {
 	const [likeNumber, setLikeNumber] = useState();
 	const [likeSpin, setLikeSpin] = useState(false);
 
-	// CONSTANTS
 	const id = postId || params.postId;
 
-	// RUN ON FIRST RENDER
 	useEffect(() => {
-		const loadPost = async () => {
-			const resPost = await axios.get(
-				`${process.env.REACT_APP_API}/posts/${id}`,
-				config
-			);
-			const data = await resPost.data;
-			setPostData(() => {
-				return { ...data };
-			});
-		};
-		const loadLikes = async () => {
-			const resLikes = await axios.get(
-				`${process.env.REACT_APP_API}/likes/${id}`,
-				config
-			);
-			// CHECK IF POST IS LIKED
-			const isLiked = resLikes.data.find((like) => {
-				return like.user === userId;
-			});
-			if (isLiked) {
-				setLiked(true);
-			}
-			setLikeNumber(resLikes.data.length);
-		};
-		const fetchImage = async () => {
-			const img = await axios.get(
-				`${process.env.REACT_APP_API}/upload/user/${postData.user}`,
-				config
-			);
-			setAvatar(`${process.env.REACT_APP_SERVER}/uploads/${img.data.url}`);
-		};
-		const fetchFollowed = async () => {
-			try {
-				const isFollowed = await axios.get(
-					`${process.env.REACT_APP_API}/follow/${postData.user}`,
-					config
-				);
-				console.log(isFollowed);
-				setIsFollowed(isFollowed.data.isFollowed);
-			} catch (error) {
-				console.log(error);
-			}
-		};
 		if (!postData) {
-			loadPost();
-			loadLikes();
+			apiServices.loadPost(id, setPostData);
+			apiServices.loadLikes(id, userId, setLiked, setLikeNumber);
 		} else {
-			fetchImage();
-			fetchFollowed();
+			apiServices.fetchPostImage(postData, setAvatar);
+			apiServices.fetchFollowed(postData, setIsFollowed);
 		}
 	}, [postData, id, userId]);
 
-	// LIKE HANDLER FUNCTION
 	const likeHandler = async () => {
-		try {
-			setLikeSpin(true);
-			const toggleLike = await axios.post(
-				`${process.env.REACT_APP_API}/likes/toggle/${id}`,
-				{},
-				config
-			);
-			if (toggleLike.status === 200) {
-				setLikeNumber(likeNumber + 1);
-				setLiked(true);
-			} else if (toggleLike.status === 204) {
-				setLikeNumber(likeNumber - 1);
-				setLiked(false);
-			}
-			setLikeSpin(false);
-		} catch (err) {
-			console.log(err.response);
-		}
+		apiServices.toggleLike(
+			id,
+			setLikeSpin,
+			setLikeNumber,
+			likeNumber,
+			setLiked
+		);
 	};
 
 	const followHandler = async () => {
-		try {
-			const follow = await axios.post(
-				`${process.env.REACT_APP_API}/follow/${postData.user}`,
-				{},
-				config
-			);
-			console.log(follow.data);
-			setIsFollowed(!isFollowed);
-		} catch (error) {
-			console.log(error);
-		}
+		apiServices.follow(postData, setIsFollowed, isFollowed);
 	};
 
-	// ACTIONS
 	const actions = [
 		<div style={{ display: 'inline-block' }} onClick={likeHandler}>
 			{likeNumber}{' '}
@@ -159,11 +83,9 @@ const PostCard = ({ postId }) => {
 	}
 
 	if (postData && likeNumber !== undefined) {
-		// CHECK IF POST IS USER'S OWN POST TO REMOVE FOLLOW BUTTON
 		if (postData.user === userId) {
 			actions.pop();
 		}
-		// RETURN DISPLAY CARD CONTROLLED COMPONENT
 		return (
 			<DisplayCard
 				avatar={avatar}

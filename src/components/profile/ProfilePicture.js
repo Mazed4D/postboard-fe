@@ -3,25 +3,14 @@ import { UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import axios from 'axios';
-
-const headers = {
-	Authorization: `Bearer ${localStorage.getItem('token')}`,
-};
+import apiServices from '../../services/api.services';
 
 const ProfilePicture = ({ userId, setAvatar }) => {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		const fetchImage = async () => {
-			const img = await axios.get(
-				`${process.env.REACT_APP_API}/upload/user/${userId}`,
-				{ headers: headers }
-			);
-			setAvatar(`${process.env.REACT_APP_SERVER}/uploads/${img.data.url}`);
-		};
-		fetchImage();
+		apiServices.fetchImage(userId, setAvatar);
 	}, []);
 
 	const beforeUpload = (file) => {
@@ -49,21 +38,18 @@ const ProfilePicture = ({ userId, setAvatar }) => {
 	};
 
 	return (
-		<>
-			{/* <Image src={image} /> */}
-			<Spin spinning={loading}>
-				<Upload
-					name='profilePicture'
-					action={`${process.env.REACT_APP_API}/upload/user/${userId}`}
-					headers={headers}
-					beforeUpload={beforeUpload}
-					onChange={handleChange}
-					showUploadList={false}
-				>
-					<Button icon={<UploadOutlined />}>Upload profile picture</Button>
-				</Upload>
-			</Spin>
-		</>
+		<Spin spinning={loading}>
+			<Upload
+				name='profilePicture'
+				action={`${process.env.REACT_APP_API}/upload/user/${userId}`}
+				headers={apiServices.headers}
+				beforeUpload={beforeUpload}
+				onChange={handleChange}
+				showUploadList={false}
+			>
+				<Button icon={<UploadOutlined />}>Upload profile picture</Button>
+			</Upload>
+		</Spin>
 	);
 };
 

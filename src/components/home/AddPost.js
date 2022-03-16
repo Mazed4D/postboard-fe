@@ -1,15 +1,9 @@
 import { Button, Input, Spin } from 'antd';
 import { useState } from 'react';
 import { SendOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import apiServices from '../../services/api.services';
 const { TextArea } = Input;
-
-const config = {
-	headers: {
-		Authorization: `Bearer ${localStorage.getItem('token')}`,
-	},
-};
 
 const AddPost = () => {
 	const [text, setText] = useState('');
@@ -18,20 +12,7 @@ const AddPost = () => {
 
 	const sendPostHandler = async () => {
 		setLoading(true);
-		try {
-			// eslint-disable-next-line no-unused-vars
-			const res = await axios.post(
-				`${process.env.REACT_APP_API}/posts`,
-				{
-					text,
-				},
-				config
-			);
-			navigate(0);
-		} catch (error) {
-			console.log(error.response);
-		}
-
+		apiServices.sendPost(text, navigate);
 		setLoading(false);
 	};
 

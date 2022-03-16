@@ -1,14 +1,10 @@
 import { Pagination, Spin } from 'antd';
 import Title from 'antd/lib/typography/Title';
-import axios from 'axios';
 import React from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import AddPost from '../components/home/AddPost';
 import PostCard from '../components/post/PostCard';
+import apiServices from '../services/api.services';
 
 const Home = () => {
 	const navigate = useNavigate();
@@ -19,31 +15,7 @@ const Home = () => {
 	const [pageNum, setPageNum] = useState(page || 1);
 	useEffect(() => {
 		setLoading(true);
-		const printPosts = async () => {
-			try {
-				const loadPosts = await axios.get(
-					`${process.env.REACT_APP_API}/posts?page=${pageNum}`
-				);
-				setPosts(loadPosts.data.postIds);
-				setNumberOfPosts(loadPosts.data.totalPosts);
-			} catch (error) {
-				toast.error(
-					`${error.response.data.msg || error.response.data} (${
-						error.response.status
-					})`,
-					{
-						position: 'top-right',
-						autoClose: 3000,
-						hideProgressBar: true,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-					}
-				);
-			}
-		};
-		printPosts();
+		apiServices.printPosts(pageNum, setPosts, setNumberOfPosts);
 		setLoading(false);
 	}, [pageNum]);
 
@@ -64,17 +36,6 @@ const Home = () => {
 					setPageNum(e);
 					navigate(`/${e}`);
 				}}
-			/>
-			<ToastContainer
-				position='top-right'
-				autoClose={3000}
-				hideProgressBar
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
 			/>
 		</div>
 	);

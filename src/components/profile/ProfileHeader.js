@@ -2,15 +2,9 @@ import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import axios from 'axios';
 import { useState } from 'react';
 import ProfilePicture from './ProfilePicture';
-
-const config = {
-	headers: {
-		Authorization: `Bearer ${localStorage.getItem('token')}`,
-	},
-};
+import apiServices from '../../services/api.services';
 
 const ProfileHeader = () => {
 	const { userId } = useParams();
@@ -18,15 +12,8 @@ const ProfileHeader = () => {
 	const [avatar, setAvatar] = useState();
 
 	useEffect(() => {
-		const fetchUserName = async () => {
-			const user = await axios.get(
-				`${process.env.REACT_APP_API}/users/${userId}`,
-				config
-			);
-			setName(user.data.name);
-		};
-		fetchUserName();
-	});
+		apiServices.fetchUserName(userId, setName);
+	}, []);
 
 	return (
 		<div>

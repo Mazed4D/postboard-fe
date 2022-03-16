@@ -2,22 +2,14 @@ import React, { useState } from 'react';
 import ReplyComment from './ReplyComment';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import axios from 'axios';
+import apiServices from '../../services/api.services';
 
 const Comments = () => {
 	const { postId } = useParams();
 	const [comments, setComments] = useState([]);
 
 	useEffect(() => {
-		const fetchComments = async () => {
-			const fetchedComments = await axios.get(
-				`${process.env.REACT_APP_API}/comments/post/${postId}`
-			);
-			if (fetchedComments.status === 200) {
-				setComments(fetchedComments.data);
-			}
-		};
-		fetchComments();
+		apiServices.fetchComments(postId, setComments);
 	}, []);
 
 	return (
