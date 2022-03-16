@@ -9,12 +9,14 @@ import { deleteCredientials } from '../../redux/auth';
 import { useMediaQuery } from 'react-responsive';
 import MenuComp from './Menu';
 import { useState } from 'react';
+import PostButton from './PostButton';
+import PostModal from './PostModal';
 
 const { Header, Footer, Content } = Layout;
 
 const LayoutComp = () => {
 	const isDesktopOrLaptop = useMediaQuery({
-		query: '(min-width: 1224px)',
+		query: '(min-width: 900px)',
 	});
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -22,6 +24,7 @@ const LayoutComp = () => {
 	const userId = localStorage.getItem('userId');
 	const isLoggedIn = token || false;
 	const [visible, setVisible] = useState(false);
+	const [openModal, setOpenModal] = useState(false);
 	const showDrawer = () => {
 		setVisible(true);
 	};
@@ -38,7 +41,7 @@ const LayoutComp = () => {
 	return (
 		<Layout className='layout' style={{ minHeight: '100vh' }}>
 			<Header>
-				<div className={styles.logo}>
+				<div className={styles.logo} style={{ cursor: 'pointer' }}>
 					<Text style={{ fontSize: '1rem' }}>
 						<MessageFilled /> Postboard
 					</Text>
@@ -88,6 +91,11 @@ const LayoutComp = () => {
 			<Footer style={{ textAlign: 'center' }}>
 				Postboard-FE, made by <a href='https://github.com/Mazed4d'>Milan</a>
 			</Footer>
+			<PostButton
+				isDesktopOrLaptop={isDesktopOrLaptop}
+				onClick={() => setOpenModal(true)}
+			/>
+			<PostModal visible={openModal} close={() => setOpenModal(false)} />
 		</Layout>
 	);
 };
