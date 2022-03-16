@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import ProfilePicture from './ProfilePicture';
 import apiServices from '../../services/api.services';
+import Title from 'antd/lib/typography/Title';
+import Text from 'antd/lib/typography/Text';
 
 const ProfileHeader = () => {
 	const { userId } = useParams();
@@ -22,20 +24,21 @@ const ProfileHeader = () => {
 		<div style={{ marginBottom: '1rem' }}>
 			<div>
 				<Avatar
-					size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
+					style={{ minWidth: '6rem', minHeight: '6rem' }}
+					size='large'
 					shape='square'
 					icon={<UserOutlined />}
 					src={avatar}
 				/>
 			</div>
 			<br />
+			<Title level={'h2'}>{name}</Title>
+			<Text>{userId}</Text>
 			<ProfilePicture
 				userId={userId}
 				loggedUserId={loggedUserId}
 				setAvatar={setAvatar}
 			/>
-			<h2>{name}</h2>
-			<p>{userId}</p>
 			{loggedUserId !== userId && (
 				<Spin spinning={isFollowed === undefined}>
 					<Button>{isFollowed ? 'Unfollow' : 'Follow'}</Button>
