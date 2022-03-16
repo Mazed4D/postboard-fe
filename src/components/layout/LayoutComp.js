@@ -1,26 +1,33 @@
-import { Layout, Menu } from 'antd';
+import { Drawer, Layout, Menu } from 'antd';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import {
-	HomeOutlined,
-	UserOutlined,
-	LogoutOutlined,
-	MessageFilled,
-	TeamOutlined,
-} from '@ant-design/icons';
+import { MessageFilled, MenuOutlined } from '@ant-design/icons';
 import styles from './Layout.module.less';
 import Text from 'antd/lib/typography/Text';
 import { useDispatch } from 'react-redux';
 import authServices from '../../services/auth.service';
 import { deleteCredientials } from '../../redux/auth';
+import { useMediaQuery } from 'react-responsive';
+import MenuComp from './Menu';
+import { useState } from 'react';
 
 const { Header, Footer, Content } = Layout;
 
 const LayoutComp = () => {
+	const isDesktopOrLaptop = useMediaQuery({
+		query: '(min-width: 1224px)',
+	});
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const token = localStorage.getItem('token');
 	const userId = localStorage.getItem('userId');
 	const isLoggedIn = token || false;
-	const dispatch = useDispatch();
+	const [visible, setVisible] = useState(false);
+	const showDrawer = () => {
+		setVisible(true);
+	};
+	const onClose = () => {
+		setVisible(false);
+	};
 
 	const logoutHandler = () => {
 		authServices.logout();
@@ -36,40 +43,48 @@ const LayoutComp = () => {
 						<MessageFilled /> Postboard
 					</Text>
 				</div>
-				<Menu theme='dark' mode='horizontal' defaultSelectedKeys={['2']}>
-					{isLoggedIn && (
-						<>
-							<Menu.Item key='home'>
-								<NavLink to={'/'}>
-									<HomeOutlined /> Home
-								</NavLink>
-							</Menu.Item>
-							<Menu.Item key='followed'>
-								<NavLink to={`/followed`}>
-									<TeamOutlined /> Followed
-								</NavLink>
-							</Menu.Item>
-							<Menu.Item key='profile'>
-								<NavLink to={`/user/${userId}`}>
-									<UserOutlined /> Profile
-								</NavLink>
-							</Menu.Item>
+				{isDesktopOrLaptop && (
+					<MenuComp
+						isLoggedIn={isLoggedIn}
+						userId={userId}
+						logoutHandler={logoutHandler}
+					/>
+				)}
+				{!isDesktopOrLaptop && (
+					<>
+						<Menu mode='horizontal' theme='dark'>
 							<Menu.Item
-								key='logout'
+								key='drawer'
 								style={{ marginLeft: 'auto' }}
-								onClick={logoutHandler}
+								onClick={() => setVisible(true)}
 							>
-								<LogoutOutlined /> Logout
+								<MenuOutlined />
 							</Menu.Item>
-						</>
-					)}
-				</Menu>
+						</Menu>
+						<Drawer
+							placement='left'
+							onClose={onClose}
+							visible={visible}
+							width={'60vw'}
+							onClick={() => setVisible(false)}
+						>
+							<MenuComp
+								mode='vertical'
+								isLoggedIn={isLoggedIn}
+								userId={userId}
+								logoutHandler={logoutHandler}
+							/>
+						</Drawer>
+					</>
+				)}
 			</Header>
-			<Content style={{ padding: '50px' }}>
-				<div className={styles['space-align-container']}>
-					<Outlet />
-				</div>
-			</Content>
+			<Layout>
+				<Content style={{ padding: '50px' }}>
+					<div className={styles['space-align-container']}>
+						<Outlet />
+					</div>
+				</Content>
+			</Layout>
 			<Footer style={{ textAlign: 'center' }}>
 				Postboard-FE, made by <a href='https://github.com/Mazed4d'>Milan</a>
 			</Footer>
