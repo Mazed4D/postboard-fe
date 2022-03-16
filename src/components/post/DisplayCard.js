@@ -14,8 +14,7 @@ const DisplayCard = ({
 }) => {
 	return (
 		<Card
-			style={{ width: 500, marginBottom: '1rem' }}
-			hoverable
+			style={{ width: '90vw', maxWidth: 500, marginBottom: '1rem' }}
 			actions={actions}
 		>
 			<Card.Meta
