@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import apiServices from '../../services/api.services';
 
-const ProfilePicture = ({ userId, setAvatar }) => {
+const ProfilePicture = ({ userId, loggedUserId, setAvatar }) => {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 
@@ -39,16 +39,18 @@ const ProfilePicture = ({ userId, setAvatar }) => {
 
 	return (
 		<Spin spinning={loading}>
-			<Upload
-				name='profilePicture'
-				action={`${process.env.REACT_APP_API}/upload/user/${userId}`}
-				headers={apiServices.headers}
-				beforeUpload={beforeUpload}
-				onChange={handleChange}
-				showUploadList={false}
-			>
-				<Button icon={<UploadOutlined />}>Upload profile picture</Button>
-			</Upload>
+			{loggedUserId === userId && (
+				<Upload
+					name='profilePicture'
+					action={`${process.env.REACT_APP_API}/upload/user/${userId}`}
+					headers={apiServices.headers}
+					beforeUpload={beforeUpload}
+					onChange={handleChange}
+					showUploadList={false}
+				>
+					<Button icon={<UploadOutlined />}>Upload profile picture</Button>
+				</Upload>
+			)}
 		</Spin>
 	);
 };

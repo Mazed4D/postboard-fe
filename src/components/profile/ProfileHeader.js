@@ -29,7 +29,11 @@ const ProfileHeader = () => {
 				/>
 			</div>
 			<br />
-			<ProfilePicture userId={userId} setAvatar={setAvatar} />
+			<ProfilePicture
+				userId={userId}
+				loggedUserId={loggedUserId}
+				setAvatar={setAvatar}
+			/>
 			<h2>{name}</h2>
 			<p>{userId}</p>
 			{loggedUserId !== userId && (
