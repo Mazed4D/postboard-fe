@@ -6,10 +6,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons';
 import apiServices from '../../services/api.services';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 const ReplyComment = ({ commentId, user, userId, text }) => {
 	const [loading, setLoading] = useState(false);
+	const [avatar, setAvatar] = useState();
+
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		apiServices.fetchImage(userId, setAvatar);
+	}, []);
 
 	const confirmDelete = () => {
 		setLoading(true);
@@ -42,7 +49,7 @@ const ReplyComment = ({ commentId, user, userId, text }) => {
 				actions={actions}
 				avatar={
 					<Link to={`/user/${userId}`}>
-						<Avatar icon={<UserOutlined />} alt={user} />
+						<Avatar icon={<UserOutlined />} src={avatar} alt={user} />
 					</Link>
 				}
 				content={<Text>{text}</Text>}
