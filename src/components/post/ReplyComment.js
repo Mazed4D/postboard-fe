@@ -33,7 +33,7 @@ const ReplyComment = ({ commentId, user, userId, text }) => {
 			<Comment
 				style={{
 					marginTop: '0.5rem',
-					minWidth: '60vw',
+					maxWidth: 600,
 					backgroundColor: '#141414',
 					padding: '0.5rem',
 					borderRadius: 10,
