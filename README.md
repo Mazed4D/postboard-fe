@@ -12,6 +12,12 @@ To deploy the frontend you need to create an .env file in the root folder and ad
 
 **REACT_APP_SERVER**={URL of postboard-api, example: http://localhost:3000}
 
+After creating the .env file, to deploy with serve run
+
+> npm install
+> npm run build
+> serve -s build
+
 #### NOTE
 
 Test login button on the auth page logs in with the following inputs:
@@ -20,4 +26,4 @@ email: test@test.com
 
 pw: testpass
 
-This account is NOT automatically created upon deployment and has to be registered manually.
+This account is NOT automatically created upon deployment and **has to be registered manually**.
