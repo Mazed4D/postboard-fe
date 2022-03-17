@@ -15,7 +15,9 @@ To deploy the frontend you need to create an .env file in the root folder and ad
 After creating the .env file, to deploy with serve run
 
 > npm install
+
 > npm run build
+
 > serve -s build
 
 #### NOTE
