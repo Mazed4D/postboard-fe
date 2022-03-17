@@ -59,7 +59,7 @@ const sendPost = async (text, navigate) => {
 
 const editPost = async (text, postId, navigate) => {
 	try {
-		await axios.post(
+		await axios.patch(
 			`${process.env.REACT_APP_API}/posts/${postId}`,
 			{
 				text,
@@ -78,8 +78,7 @@ const editPost = async (text, postId, navigate) => {
 
 const addComment = async (postId, text, navigate) => {
 	try {
-		// eslint-disable-next-line no-unused-vars
-		const res = await axios.post(
+		await axios.post(
 			`${process.env.REACT_APP_API}/comments/post/${postId}`,
 			{
 				text,
@@ -206,7 +205,7 @@ const toggleLike = async (
 
 const follow = async (postData, setIsFollowed, isFollowed) => {
 	try {
-		const follow = await axios.post(
+		await axios.post(
 			`${process.env.REACT_APP_API}/follow/${postData.user}`,
 			{},
 			config
@@ -223,7 +222,7 @@ const follow = async (postData, setIsFollowed, isFollowed) => {
 
 const deleteComment = async (commentId) => {
 	try {
-		const comment = await axios.delete(
+		await axios.delete(
 			`${process.env.REACT_APP_API}/comments/${commentId}`,
 			config
 		);
@@ -239,11 +238,27 @@ const deleteComment = async (commentId) => {
 
 const deletePost = async (postId) => {
 	try {
-		const post = await axios.delete(
-			`${process.env.REACT_APP_API}/posts/${postId}`,
+		await axios.delete(`${process.env.REACT_APP_API}/posts/${postId}`, config);
+		return true;
+	} catch (error) {
+		message.error(
+			`${error.response.data.msg || error.response.data} (${
+				error.response.status
+			})`
+		);
+	}
+};
+
+const editComment = async (commentId, text, navigate) => {
+	try {
+		await axios.patch(
+			`${process.env.REACT_APP_API}/comments/${commentId}`,
+			{
+				text,
+			},
 			config
 		);
-		return true;
+		navigate(0);
 	} catch (error) {
 		message.error(
 			`${error.response.data.msg || error.response.data} (${
@@ -270,6 +285,7 @@ const apiServices = {
 	deleteComment,
 	deletePost,
 	editPost,
+	editComment,
 };
 
 export default apiServices;

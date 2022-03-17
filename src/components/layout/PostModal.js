@@ -9,11 +9,21 @@ const PostModal = ({
 	isEdit = false,
 	editId,
 	editText = '',
+	isComment = false,
 }) => {
 	return (
 		<Modal visible={visible} footer={null} onCancel={close}>
-			<Title level={3}>{isEdit ? 'Edit post' : 'Add post'}</Title>
-			<AddPost editId={editId} isEdit={isEdit} editText={editText} />
+			<Title level={3}>
+				{!isEdit && 'Add post'}
+				{isEdit && isComment && 'Edit comment'}
+				{isEdit && !isComment && 'Edit post'}
+			</Title>
+			<AddPost
+				editId={editId}
+				isEdit={isEdit}
+				editText={editText}
+				isComment={isComment}
+			/>
 		</Modal>
 	);
 };
