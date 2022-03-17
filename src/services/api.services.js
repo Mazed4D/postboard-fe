@@ -40,9 +40,27 @@ const printPosts = async (
 
 const sendPost = async (text, navigate) => {
 	try {
-		// eslint-disable-next-line no-unused-vars
-		const res = await axios.post(
+		await axios.post(
 			`${process.env.REACT_APP_API}/posts`,
+			{
+				text,
+			},
+			config
+		);
+		navigate(0);
+	} catch (error) {
+		message.error(
+			`${error.response.data.msg || error.response.data} (${
+				error.response.status
+			})`
+		);
+	}
+};
+
+const editPost = async (text, postId, navigate) => {
+	try {
+		await axios.post(
+			`${process.env.REACT_APP_API}/posts/${postId}`,
 			{
 				text,
 			},
@@ -251,6 +269,7 @@ const apiServices = {
 	follow,
 	deleteComment,
 	deletePost,
+	editPost,
 };
 
 export default apiServices;
