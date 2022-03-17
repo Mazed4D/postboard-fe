@@ -18,8 +18,6 @@ const Comments = () => {
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'center',
-				alignItems: 'center',
-				margin: '0 12rem',
 			}}
 		>
 			{comments.map((comment) => {

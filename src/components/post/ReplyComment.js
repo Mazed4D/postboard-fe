@@ -31,6 +31,13 @@ const ReplyComment = ({ commentId, user, userId, text }) => {
 	return (
 		<Spin spinning={loading}>
 			<Comment
+				style={{
+					marginTop: '0.5rem',
+					minWidth: '60vw',
+					backgroundColor: '#141414',
+					padding: '0.5rem',
+					borderRadius: 10,
+				}}
 				author={<Link to={`/user/${userId}`}>{user}</Link>}
 				actions={actions}
 				avatar={
