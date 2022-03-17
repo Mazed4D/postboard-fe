@@ -32,7 +32,9 @@ const ProfilePicture = ({ userId, loggedUserId, setAvatar }) => {
 		}
 		if (info.file.status === 'done') {
 			setLoading(false);
-			navigate(0);
+			setTimeout(() => {
+				navigate(0);
+			}, 2000);
 		}
 	};
 
