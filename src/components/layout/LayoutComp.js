@@ -53,7 +53,7 @@ const LayoutComp = () => {
 						logoutHandler={logoutHandler}
 					/>
 				)}
-				{!isDesktopOrLaptop && (
+				{!isDesktopOrLaptop && isLoggedIn && (
 					<>
 						<Menu mode='horizontal' theme='dark'>
 							<Menu.Item
@@ -91,11 +91,15 @@ const LayoutComp = () => {
 			<Footer style={{ textAlign: 'center' }}>
 				Postboard-FE, made by <a href='https://github.com/Mazed4d'>Milan</a>
 			</Footer>
-			<PostButton
-				isDesktopOrLaptop={isDesktopOrLaptop}
-				onClick={() => setOpenModal(true)}
-			/>
-			<PostModal visible={openModal} close={() => setOpenModal(false)} />
+			{isLoggedIn && (
+				<>
+					<PostButton
+						isDesktopOrLaptop={isDesktopOrLaptop}
+						onClick={() => setOpenModal(true)}
+					/>
+					<PostModal visible={openModal} close={() => setOpenModal(false)} />
+				</>
+			)}
 		</Layout>
 	);
 };
