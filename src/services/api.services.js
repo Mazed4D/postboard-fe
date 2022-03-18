@@ -273,7 +273,6 @@ const fetchFollowCount = async (userId, setFollowsCount, setFollowerCount) => {
 			`${process.env.REACT_APP_API}/follow/${userId}/followCount`,
 			config
 		);
-		console.log(followObj.data);
 		setFollowsCount(followObj.data.followsCount);
 		setFollowerCount(followObj.data.followerCount);
 	} catch (error) {
