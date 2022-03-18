@@ -40,9 +40,27 @@ const printPosts = async (
 
 const sendPost = async (text, navigate) => {
 	try {
-		// eslint-disable-next-line no-unused-vars
-		const res = await axios.post(
+		await axios.post(
 			`${process.env.REACT_APP_API}/posts`,
+			{
+				text,
+			},
+			config
+		);
+		navigate(0);
+	} catch (error) {
+		message.error(
+			`${error.response.data.msg || error.response.data} (${
+				error.response.status
+			})`
+		);
+	}
+};
+
+const editPost = async (text, postId, navigate) => {
+	try {
+		await axios.patch(
+			`${process.env.REACT_APP_API}/posts/${postId}`,
 			{
 				text,
 			},
@@ -60,8 +78,7 @@ const sendPost = async (text, navigate) => {
 
 const addComment = async (postId, text, navigate) => {
 	try {
-		// eslint-disable-next-line no-unused-vars
-		const res = await axios.post(
+		await axios.post(
 			`${process.env.REACT_APP_API}/comments/post/${postId}`,
 			{
 				text,
@@ -186,17 +203,16 @@ const toggleLike = async (
 	}
 };
 
-const follow = async (postData, setIsFollowed, isFollowed) => {
+const follow = async (postData) => {
 	try {
-		const follow = await axios.post(
+		await axios.post(
 			`${process.env.REACT_APP_API}/follow/${postData.user}`,
 			{},
 			config
 		);
-		setIsFollowed(!isFollowed);
 	} catch (error) {
 		message.error(
-			`${error.response.data.msg || error.response.data} (${
+			`${error.response.data.msg || error.response.data || error.response} (${
 				error.response.status
 			})`
 		);
@@ -205,7 +221,7 @@ const follow = async (postData, setIsFollowed, isFollowed) => {
 
 const deleteComment = async (commentId) => {
 	try {
-		const comment = await axios.delete(
+		await axios.delete(
 			`${process.env.REACT_APP_API}/comments/${commentId}`,
 			config
 		);
@@ -221,11 +237,44 @@ const deleteComment = async (commentId) => {
 
 const deletePost = async (postId) => {
 	try {
-		const post = await axios.delete(
-			`${process.env.REACT_APP_API}/posts/${postId}`,
+		await axios.delete(`${process.env.REACT_APP_API}/posts/${postId}`, config);
+		return true;
+	} catch (error) {
+		message.error(
+			`${error.response.data.msg || error.response.data} (${
+				error.response.status
+			})`
+		);
+	}
+};
+
+const editComment = async (commentId, text, navigate) => {
+	try {
+		await axios.patch(
+			`${process.env.REACT_APP_API}/comments/${commentId}`,
+			{
+				text,
+			},
 			config
 		);
-		return true;
+		navigate(0);
+	} catch (error) {
+		message.error(
+			`${error.response.data.msg || error.response.data} (${
+				error.response.status
+			})`
+		);
+	}
+};
+
+const fetchFollowCount = async (userId, setFollowsCount, setFollowerCount) => {
+	try {
+		const followObj = await axios.get(
+			`${process.env.REACT_APP_API}/follow/${userId}/followCount`,
+			config
+		);
+		setFollowsCount(followObj.data.followsCount);
+		setFollowerCount(followObj.data.followerCount);
 	} catch (error) {
 		message.error(
 			`${error.response.data.msg || error.response.data} (${
@@ -251,6 +300,9 @@ const apiServices = {
 	follow,
 	deleteComment,
 	deletePost,
+	editPost,
+	editComment,
+	fetchFollowCount,
 };
 
 export default apiServices;

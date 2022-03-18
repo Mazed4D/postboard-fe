@@ -7,12 +7,14 @@ import {
 	UsergroupDeleteOutlined,
 	UsergroupAddOutlined,
 	DeleteOutlined,
+	EditOutlined,
 } from '@ant-design/icons';
 import DisplayCard from './DisplayCard';
 import LoadingCard from './LoadingCard';
 import { useSelector } from 'react-redux';
 import apiServices from '../../services/api.services';
 import { Popconfirm } from 'antd';
+import PostModal from '../layout/PostModal';
 
 const PostCard = ({ postId }) => {
 	const { userId } = useSelector((state) => state.auth);
@@ -24,6 +26,7 @@ const PostCard = ({ postId }) => {
 	const [isFollowed, setIsFollowed] = useState(false);
 	const [likeNumber, setLikeNumber] = useState();
 	const [likeSpin, setLikeSpin] = useState(false);
+	const [visible, setVisible] = useState(false);
 
 	const id = postId || params.postId;
 
@@ -45,6 +48,10 @@ const PostCard = ({ postId }) => {
 			likeNumber,
 			setLiked
 		);
+	};
+
+	const editHandler = () => {
+		setVisible(true);
 	};
 
 	const confirmDelete = () => {
@@ -93,6 +100,11 @@ const PostCard = ({ postId }) => {
 		if (postData.user === userId) {
 			actions.pop();
 			actions.push(
+				<div onClick={editHandler}>
+					<EditOutlined />
+				</div>
+			);
+			actions.push(
 				<Popconfirm
 					title='Are you sure you want to delete this post?'
 					onConfirm={confirmDelete}
@@ -103,18 +115,27 @@ const PostCard = ({ postId }) => {
 			);
 		}
 		return (
-			<DisplayCard
-				avatar={avatar}
-				user={postData.user}
-				key={postData._id}
-				actions={actions}
-				name={postData.name}
-				date={new Date(postData.createdAt).toLocaleString()}
-				postId={id}
-				text={postData.text}
-				navigateUser={() => navigate(`/user/${postData.user}`)}
-				navigatePost={() => navigate(`/post/${id}`)}
-			/>
+			<>
+				<DisplayCard
+					avatar={avatar}
+					user={postData.user}
+					key={postData._id}
+					actions={actions}
+					name={postData.name}
+					date={new Date(postData.createdAt).toLocaleString()}
+					postId={id}
+					text={postData.text}
+					navigateUser={() => navigate(`/user/${postData.user}`)}
+					navigatePost={() => navigate(`/post/${id}`)}
+				/>
+				<PostModal
+					visible={visible}
+					isEdit={true}
+					editText={postData.text}
+					editId={postId}
+					close={() => setVisible(false)}
+				/>
+			</>
 		);
 	}
 };

@@ -5,14 +5,27 @@ import { useNavigate } from 'react-router-dom';
 import apiServices from '../../services/api.services';
 const { TextArea } = Input;
 
-const AddPost = () => {
-	const [text, setText] = useState('');
+const AddPost = ({
+	isEdit = false,
+	editText = '',
+	editId,
+	isComment = false,
+}) => {
+	const [text, setText] = useState(editText);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
 	const sendPostHandler = async () => {
 		setLoading(true);
-		apiServices.sendPost(text, navigate);
+		if (isEdit) {
+			if (isComment) {
+				apiServices.editComment(editId, text, navigate);
+			} else {
+				apiServices.editPost(text, editId, navigate);
+			}
+		} else {
+			apiServices.sendPost(text, navigate);
+		}
 		setLoading(false);
 	};
 
@@ -34,7 +47,9 @@ const AddPost = () => {
 					onClick={sendPostHandler}
 				>
 					<SendOutlined />
-					Send post{' '}
+					{!isEdit && 'Add post'}
+					{isEdit && isComment && 'Edit comment'}
+					{isEdit && !isComment && 'Edit post'}
 				</Button>
 			</Spin>
 		</div>
