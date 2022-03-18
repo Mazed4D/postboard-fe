@@ -203,17 +203,16 @@ const toggleLike = async (
 	}
 };
 
-const follow = async (postData, setIsFollowed, isFollowed) => {
+const follow = async (postData) => {
 	try {
 		await axios.post(
 			`${process.env.REACT_APP_API}/follow/${postData.user}`,
 			{},
 			config
 		);
-		setIsFollowed(!isFollowed);
 	} catch (error) {
 		message.error(
-			`${error.response.data.msg || error.response.data} (${
+			`${error.response.data.msg || error.response.data || error.response} (${
 				error.response.status
 			})`
 		);
@@ -268,6 +267,24 @@ const editComment = async (commentId, text, navigate) => {
 	}
 };
 
+const fetchFollowCount = async (userId, setFollowsCount, setFollowerCount) => {
+	try {
+		const followObj = await axios.get(
+			`${process.env.REACT_APP_API}/follow/${userId}/followCount`,
+			config
+		);
+		console.log(followObj.data);
+		setFollowsCount(followObj.data.followsCount);
+		setFollowerCount(followObj.data.followerCount);
+	} catch (error) {
+		message.error(
+			`${error.response.data.msg || error.response.data} (${
+				error.response.status
+			})`
+		);
+	}
+};
+
 const apiServices = {
 	headers,
 	printPosts,
@@ -286,6 +303,7 @@ const apiServices = {
 	deletePost,
 	editPost,
 	editComment,
+	fetchFollowCount,
 };
 
 export default apiServices;
