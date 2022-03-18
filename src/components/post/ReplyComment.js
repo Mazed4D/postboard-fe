@@ -20,9 +20,8 @@ const ReplyComment = ({ commentId, user, userId, text }) => {
 
 	const confirmDelete = () => {
 		setLoading(true);
-		apiServices.deleteComment(commentId);
+		apiServices.deleteComment(commentId, navigate);
 		setLoading(false);
-		navigate(0);
 	};
 
 	const actions = [

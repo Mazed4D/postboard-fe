@@ -203,13 +203,13 @@ const follow = async (postData, setIsFollowed, isFollowed) => {
 	}
 };
 
-const deleteComment = async (commentId) => {
+const deleteComment = async (commentId, navigate) => {
 	try {
-		const comment = await axios.delete(
+		await axios.delete(
 			`${process.env.REACT_APP_API}/comments/${commentId}`,
 			config
 		);
-		return true;
+		navigate(0);
 	} catch (error) {
 		message.error(
 			`${error.response.data.msg || error.response.data} (${
